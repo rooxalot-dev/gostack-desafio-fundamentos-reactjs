@@ -3,7 +3,6 @@ import { useHistory } from 'react-router-dom';
 
 import filesize from 'filesize';
 
-import Header from '../../components/Header';
 import FileList from '../../components/FileList';
 import Upload from '../../components/Upload';
 
@@ -23,24 +22,48 @@ const Import: React.FC = () => {
   const history = useHistory();
 
   async function handleUpload(): Promise<void> {
-    // const data = new FormData();
-
-    // TODO
-
     try {
-      // await api.post('/transactions/import', data);
+      // Realiza uma chamada por CSV de importação
+      const csvImportResults = await Promise.all(
+        uploadedFiles.map(file => {
+          const data = new FormData();
+          data.append('file', file.file);
+
+          return api.post('/transactions/import', data);
+        }),
+      );
+
+      const results = csvImportResults.map(result => ({
+        status: result.status,
+        request: result.request,
+        data: result.data,
+      }));
+
+      const hasError = results.some(result => result.status !== 200);
+      if (hasError) {
+        throw new Error(
+          'Houve um erro ao realizar o upload de um ou mais arquivos!',
+        );
+      }
+
+      history.push('/');
     } catch (err) {
-      // console.log(err.response.error);
+      console.log(err.response.error);
     }
   }
 
   function submitFile(files: File[]): void {
-    // TODO
+    const mappedFiles = files.map(file => ({
+      file,
+      name: file.name,
+      readableSize: filesize(file.size),
+    }));
+
+    setUploadedFiles([...uploadedFiles, ...mappedFiles]);
   }
 
   return (
     <>
-      <Header size="small" />
       <Container>
         <Title>Importar uma transação</Title>
         <ImportFileContainer>

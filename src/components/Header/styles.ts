@@ -9,12 +9,15 @@ export const Container = styled.div<ContainerProps>`
   padding: 30px 0;
 
   header {
-    width: 1120px;
+    display: flex;
+    justify-content: space-between;
+
+    width: 100%;
+    max-width: 1120px;
     margin: 0 auto;
     padding: ${({ size }) => (size === 'small' ? '0 20px ' : '0 20px 150px')};
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+
+    transition: padding 0.2s;
 
     nav {
       a {
@@ -29,6 +32,20 @@ export const Container = styled.div<ContainerProps>`
 
         &:hover {
           opacity: 0.6;
+        }
+
+        &.active {
+          position: relative;
+
+          &::after {
+            content: '';
+            position: absolute;
+            height: 2px;
+            width: 100%;
+            background-color: #ff872c;
+            bottom: -10px;
+            left: 0;
+          }
         }
       }
     }

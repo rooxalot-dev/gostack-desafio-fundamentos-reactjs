@@ -21,6 +21,12 @@ export const CardContainer = styled.section`
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 32px;
   margin-top: -150px;
+
+  @media (max-width: 728px) {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
 `;
 
 export const Card = styled.div`
@@ -28,6 +34,12 @@ export const Card = styled.div`
   padding: 22px 32px;
   border-radius: 5px;
   color: ${({ total }: CardProps): string => (total ? '#fff' : '#363F5F')};
+
+  & + div {
+    @media (max-width: 728px) {
+      margin-top: 25px;
+    }
+  }
 
   header {
     display: flex;
@@ -51,20 +63,21 @@ export const TableContainer = styled.section`
   margin-top: 64px;
 
   table {
+    table-layout: fixed;
     width: 100%;
     border-spacing: 0 8px;
 
     th {
       color: #969cb3;
       font-weight: normal;
-      padding: 20px 32px;
+      padding: 20px;
       text-align: left;
       font-size: 16px;
       line-height: 24px;
     }
 
     td {
-      padding: 20px 32px;
+      padding: 20px;
       border: 0;
       background: #fff;
       font-size: 16px;
